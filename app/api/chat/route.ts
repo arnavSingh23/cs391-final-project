@@ -24,7 +24,7 @@ export async function POST(req: Request) {
                     messages: [
                         {
                             role: "user",
-                            content: prompt,
+                            content: prompt + " ensure that you do not use emojis, or markdown, just plain paragraphs in a clean and concise way",
                         },
                     ],
                 }),
