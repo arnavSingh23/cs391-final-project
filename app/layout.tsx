@@ -6,7 +6,6 @@ import NavBar from "./components/NavBar";
 
 export const metadata: Metadata = {
     title: "AI Project Advisor",
-    description: "Chatbot UI hooked up to OpenRouter",
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {

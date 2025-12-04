@@ -61,7 +61,7 @@ export default function NavBar() {
                                 mr: 3,
                             }}
                         >
-                            AI Project Advisor
+                            ProjectPartner
                         </Typography>
                     </Box>
 

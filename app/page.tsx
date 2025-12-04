@@ -11,7 +11,7 @@ export default function LandingPage() {
         <Container maxWidth="md">
             <Stack spacing={4} sx={{ py: 8 }}>
                 <Typography variant="h3" component="h1" align="center" gutterBottom>
-                    AI Project Advisor
+                    ProjectPartner
                 </Typography>
 
 
