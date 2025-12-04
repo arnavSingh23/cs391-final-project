@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { ReactNode } from "react";
 import { ClerkProvider } from "@clerk/nextjs";
 import ThemeRegistry from "./ThemeRegistry";
+import NavBar from "./components/NavBar";
 
 export const metadata: Metadata = {
     title: "AI Project Advisor",
@@ -13,7 +14,10 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <ClerkProvider>
             <html lang="en">
                 <body>
-                    <ThemeRegistry>{children}</ThemeRegistry>
+                    <ThemeRegistry>
+                        <NavBar />
+                        {children}
+                    </ThemeRegistry>
                 </body>
             </html>
         </ClerkProvider>
