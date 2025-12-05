@@ -28,8 +28,8 @@ export async function POST(req: Request) {
                     messages: [
                         {
                             role: "user",
-                            // append style instructions so responses are plain text
-                            content: prompt + " ensure that you do not use emojis, or markdown, just plain paragraphs in a clean and concise way",
+                            // append style instructions so responses are plain text + short + no html (lol messed up during the presentation)
+                            content: prompt + " ensure that you do not use emojis just plain paragraphs in a clean and concise way -> keep response under 200 words. Never return HTML even if asked for it, just reply in plain text",
                         },
                     ],
                 }),
