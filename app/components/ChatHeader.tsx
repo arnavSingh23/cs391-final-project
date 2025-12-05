@@ -1,9 +1,11 @@
 "use client";
 
+// Credit: Arnav Singh
 import { Avatar, Stack, Typography, Box } from "@mui/material";
 import AutoAwesomeIcon from "@mui/icons-material/AutoAwesome";
 import { UserButton } from "@clerk/nextjs";
 
+// again typical styling with MUI
 export function ChatHeader() {
     return (
         <Stack spacing={1.5}>

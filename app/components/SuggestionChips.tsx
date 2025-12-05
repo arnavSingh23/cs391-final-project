@@ -1,26 +1,31 @@
 "use client";
 
+// Credit: Arnav Singh
 import { useState } from "react";
 import { Stack, Chip } from "@mui/material";
 import LightbulbOutlinedIcon from "@mui/icons-material/LightbulbOutlined";
 import ConstructionOutlinedIcon from "@mui/icons-material/ConstructionOutlined";
 import RocketLaunchOutlinedIcon from "@mui/icons-material/RocketLaunchOutlined";
 
+// parent passes a callback to recieve the selected prompt text
 interface Props {
     onPromptSelect: (prompt: string) => void;
 }
 
+// keys used to track which chip is CURRENTLY active
 type ChipKey = "inspo" | "stack" | "encourage";
 
 export function SuggestionChips({ onPromptSelect }: Props) {
     const [activeKey, setActiveKey] = useState<ChipKey | null>(null);
 
+    // when a chip is clicked it will be marked as active and will send prompt string to parent
     const handleClick = (key: ChipKey, prompt: string) => {
         setActiveKey(key);
         onPromptSelect(prompt);
     };
 
     return (
+        // stack is from mui to arrange children horizontally
         <Stack direction="row" spacing={1.5}>
             <Chip
                 icon={<LightbulbOutlinedIcon />}

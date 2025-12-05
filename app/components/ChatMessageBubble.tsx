@@ -1,13 +1,16 @@
 "use client";
 
+// Credit: Arnav Singh
 import { Avatar, Box, Stack, Typography } from "@mui/material";
 import PersonIcon from "@mui/icons-material/Person";
 import SmartToyIcon from "@mui/icons-material/SmartToy";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 
+// role of the message either the user or the assistant
 export type ChatRole = "user" | "assistant";
 
+// shape of chat
 export interface ChatMessage {
     id: number;
     role: ChatRole;
@@ -19,16 +22,19 @@ interface Props {
 }
 
 export function ChatMessageBubble({ message }: Props) {
+    // quick check flag to see if the message is from the user
     const isUser = message.role === "user";
 
     return (
         <Stack
             direction="row"
             spacing={1.5}
+            // Align bubbles to the right for user and left for assistant
             justifyContent={isUser ? "flex-end" : "flex-start"}
             alignItems="flex-end"
         >
             {!isUser && (
+                // show the assistant avatar on left when message is from assistant
                 <Avatar sx={{ width: 32, height: 32 }}>
                     <SmartToyIcon fontSize="small" />
                 </Avatar>
@@ -45,10 +51,12 @@ export function ChatMessageBubble({ message }: Props) {
                 }}
             >
                 {isUser ? (
+                    // simple text for users
                     <Typography variant="body2" sx={{ whiteSpace: "pre-wrap" }}>
                         {message.content}
                     </Typography>
                 ) : (
+                    // for assistants render markdown
                     <Typography
                         variant="body2"
                         component="div"
@@ -72,6 +80,9 @@ export function ChatMessageBubble({ message }: Props) {
                         }}
                     >
                         <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                            {/* ReactMarkdown parses the assistant's content as Markdown.
+                           remarkGfm enables GitHub like markdown
+                           source: https://github.com/remarkjs/react-markdown*/}
                             {message.content}
                         </ReactMarkdown>
                     </Typography>
@@ -79,6 +90,7 @@ export function ChatMessageBubble({ message }: Props) {
             </Box>
 
             {isUser && (
+                // likewise show the user avatar when user sends a message
                 <Avatar sx={{ width: 32, height: 32, bgcolor: "primary.main" }}>
                     <PersonIcon fontSize="small" />
                 </Avatar>

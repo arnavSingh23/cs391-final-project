@@ -1,8 +1,10 @@
 "use client";
 
+// Credit: Arnav Singh
 import { ReactNode } from "react";
 import { CssBaseline, ThemeProvider, createTheme } from "@mui/material";
 
+// create custom MUI theme that will be applied globally
 const theme = createTheme({
     palette: {
         primary: {
@@ -17,6 +19,7 @@ const theme = createTheme({
     },
 });
 
+// this is a wrapper component that will provide the MUI theme to all its children
 export default function ThemeRegistry({ children }: { children: ReactNode }) {
     return (
         <ThemeProvider theme={theme}>
