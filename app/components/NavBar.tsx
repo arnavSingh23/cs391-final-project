@@ -68,7 +68,7 @@ export default function NavBar() {
                     <Box
                         sx={{
                             display: "flex",
-                            gap: 1,
+                            gap: 3,
                             alignItems: "center",
                             flex: 1,
                             justifyContent: "center",
@@ -80,12 +80,15 @@ export default function NavBar() {
                                 <Button
                                     key={item.path}
                                     onClick={() => router.push(item.path)}
+                                    variant="outlined"
                                     sx={{
                                         color: active ? "primary.main" : "text.secondary",
                                         fontWeight: active ? 600 : 400,
                                         textTransform: "none",
+                                        borderColor: active ? "primary.main" : "divider",
                                         "&:hover": {
                                             bgcolor: "action.hover",
+                                            borderColor: active ? "primary.main" : "text.secondary",
                                         },
                                     }}
                                 >
