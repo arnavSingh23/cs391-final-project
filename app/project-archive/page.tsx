@@ -9,22 +9,42 @@ import FloatingAddButton from "../components/FloatingAddButton";
 import NewPostModal from "../components/NewPost";
 import type { Project } from "../../types";
 
+
+// How many projects to show per page (pagination)
+// Source: https://react.dev/reference/react/useState#controlling-the-state-structure
 const PAGE_SIZE = 10;
+// Max length for project title 
 const TITLE_MAX = 120;
+// Max length for project description 
 const DESCRIPTION_MAX = 1000;
 
+// Main component for the project archive page
+// I split up state for clarity and to avoid weird bugs with grouped state (see React docs: https://react.dev/learn/choosing-the-state-structure)
 export default function ProjectArchivePage() {
+    // List of projects loaded from the API
     const [projects, setProjects] = useState<Project[]>([]);
+    // Modal state for adding a new project
     const [isModalOpen, setIsModalOpen] = useState(false);
+    // Loading state for initial fetch
     const [loadingInitial, setLoadingInitial] = useState(false);
+    // Loading state for infinite scroll
     const [loadingMore, setLoadingMore] = useState(false);
+    // Whether there are more projects to load (for infinite scroll)
     const [hasMore, setHasMore] = useState(true);
+    // Current page for pagination
     const [page, setPage] = useState(0);
+    // Loading state for submitting a new project
     const [submitting, setSubmitting] = useState(false);
+    // Error state for API or validation
     const [error, setError] = useState<string | null>(null);
+    // Ref for infinite scroll trigger
     const loadMoreRef = useRef<HTMLDivElement | null>(null);
+    // Ref to ensure we only do the initial load once
     const initialLoadRef = useRef(false);
 
+    // Helper to map raw API data to our Project type
+    // This is just to keep the rest of the code clean and avoid bugs from missing fields
+    // Source: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map
     const mapProjects = useCallback(
         (raw: any[]): Project[] =>
             raw.map((p: any) => ({
@@ -37,13 +57,18 @@ export default function ProjectArchivePage() {
         []
     );
 
+    // Fetch projects from the API, paginated
+    // Infinite scroll pattern: https://web.dev/patterns/web-vitals/infinite-scroll/
+    // I use two loading states so the spinner UX is clear and doesn't flicker
     const fetchProjects = useCallback(
         async (pageToLoad = 0) => {
             const isFirstPage = pageToLoad === 0;
+            // Don't double-load if already loading or submitting
             if ((isFirstPage && loadingInitial) || (!isFirstPage && loadingMore) || submitting) {
                 return;
             }
 
+            // Set loading state
             if (isFirstPage) {
                 setLoadingInitial(true);
             } else {
@@ -54,6 +79,8 @@ export default function ProjectArchivePage() {
             const offset = pageToLoad * PAGE_SIZE;
 
             try {
+                // Fetch projects from our Next.js API route
+                // Source: https://nextjs.org/docs/app/building-your-application/routing/api-routes
                 const res = await fetch(`/api/project-archive?offset=${offset}&limit=${PAGE_SIZE}`);
                 const json = await res.json();
 
@@ -65,6 +92,7 @@ export default function ProjectArchivePage() {
                     if (isFirstPage) {
                         setProjects(mapped);
                     } else {
+                        // Avoid duplicates if API returns same project twice
                         setProjects((prev) => {
                             const existingIds = new Set(prev.map((p) => p.id));
                             const newOnes = mapped.filter((p) => !existingIds.has(p.id));
@@ -88,12 +116,16 @@ export default function ProjectArchivePage() {
         [loadingInitial, loadingMore, mapProjects, submitting]
     );
 
+    // Initial load: only run once
+    // Source: https://react.dev/reference/react/useEffect
     useEffect(() => {
         if (initialLoadRef.current) return;
         initialLoadRef.current = true;
         fetchProjects(0);
     }, [fetchProjects]);
 
+    // Infinite scroll: load more projects when the sentinel div is visible
+    // Source: https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API
     useEffect(() => {
         if (!loadMoreRef.current) return;
         const target = loadMoreRef.current;
@@ -112,6 +144,9 @@ export default function ProjectArchivePage() {
         return () => observer.unobserve(target);
     }, [fetchProjects, hasMore, loadingInitial, loadingMore, page]);
 
+    // Handle adding a new project via the modal
+    // I do validation here so the user gets instant feedback
+    // Source: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/length
     const handleAddProject = async (data: {
         title: string;
         description: string;
@@ -130,6 +165,8 @@ export default function ProjectArchivePage() {
         setError(null);
 
         try {
+            // POST to our Next.js API route
+            // Source: https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch
             const res = await fetch("/api/project-archive", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
@@ -138,6 +175,7 @@ export default function ProjectArchivePage() {
             const json = await res.json();
 
             if (res.ok && json.project) {
+                // Add the new project to the top of the list
                 const newProject: Project = {
                     id: json.project.id,
                     title: json.project.title,
@@ -157,6 +195,9 @@ export default function ProjectArchivePage() {
         }
     };
 
+    // Open/close modal handlers
+    // This is just classic React modal state
+    // Source: https://mui.com/material-ui/react-modal/
     const handleOpenModal = () => setIsModalOpen(true);
     const handleCloseModal = () => setIsModalOpen(false);
 
