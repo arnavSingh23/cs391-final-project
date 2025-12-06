@@ -1,5 +1,6 @@
 "use client";
 
+// Credit: Arnav Singh
 import { useState } from "react";
 import { Box, Container, Stack } from "@mui/material";
 import {ChatMessage} from "@/app/components/ChatMessageBubble";

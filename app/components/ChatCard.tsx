@@ -1,8 +1,10 @@
+// Credit: Arnav Singh
 import { Box, Divider } from "@mui/material";
 import { ChatWindow } from "./ChatWindow";
 import { ChatInput } from "./ChatInput";
 import type { ChatMessage } from "./ChatMessageBubble";
 
+// props for a chat message again
 interface Props {
     messages: ChatMessage[];
     loading: boolean;
@@ -11,6 +13,7 @@ interface Props {
     onSend: () => void;
 }
 
+// typical mui styling again
 export function ChatCard({
                              messages,
                              loading,

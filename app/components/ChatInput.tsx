@@ -1,7 +1,9 @@
+// Credit: Arnav Singh
 import { ChangeEvent, KeyboardEvent } from "react";
 import { Box, IconButton, InputBase } from "@mui/material";
 import SendRoundedIcon from "@mui/icons-material/SendRounded";
 
+// props for actual chat input
 interface Props {
     value: string;
     onChange: (value: string) => void;
@@ -10,10 +12,13 @@ interface Props {
 }
 
 export function ChatInput({ value, onChange, onSend, disabled }: Props) {
+    // update the input value when the user types
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
         onChange(e.target.value);
     };
 
+    // allow sending with enter (no shift) and prevent newline insertion
+    // source: https://stackoverflow.com/questions/18779322/disable-new-line-in-textarea-when-pressed-enter
     const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
         if (e.key === "Enter" && !e.shiftKey) {
             e.preventDefault();
@@ -22,7 +27,7 @@ export function ChatInput({ value, onChange, onSend, disabled }: Props) {
             }
         }
     };
-
+// regular mui stuff with sx custom styling
     return (
         <Box
             sx={{
