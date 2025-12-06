@@ -1,5 +1,5 @@
 "use client";
-
+// kwabena
 import {
     Dialog, DialogTitle,
     DialogContent,
@@ -12,6 +12,9 @@ import {
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { useState } from "react";
+
+const TITLE_MAX = 120;
+const DESCRIPTION_MAX = 1000;
 
 interface Props {
     open: boolean;
@@ -29,8 +32,16 @@ export default function NewPostModal({ open, onClose, onSubmit }: Props) {
     const [repoUrl, setRepoUrl] = useState("");
 
     const handleSubmit = () => {
+        const trimmedTitle = title.trim();
+        const trimmedDescription = description.trim();
+        const trimmedRepoUrl = repoUrl.trim();
+
+        if (!trimmedTitle || !trimmedDescription) {
+            return;
+        }
+
         if (onSubmit) {
-            onSubmit({ title, description, repoUrl });
+            onSubmit({ title: trimmedTitle, description: trimmedDescription, repoUrl: trimmedRepoUrl });
         }
         setTitle("");
         setDescription("");
@@ -93,6 +104,8 @@ export default function NewPostModal({ open, onClose, onSubmit }: Props) {
                             fullWidth
                             value={title}
                             onChange={(e) => setTitle(e.target.value)}
+                            inputProps={{ maxLength: TITLE_MAX }}
+                            helperText={`${title.length}/${TITLE_MAX}`}
                         />
                     </Box>
 
@@ -111,6 +124,8 @@ export default function NewPostModal({ open, onClose, onSubmit }: Props) {
                             minRows={4}
                             value={description}
                             onChange={(e) => setDescription(e.target.value)}
+                            inputProps={{ maxLength: DESCRIPTION_MAX }}
+                            helperText={`${description.length}/${DESCRIPTION_MAX}`}
                         />
                     </Box>
 

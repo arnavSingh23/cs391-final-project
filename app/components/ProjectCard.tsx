@@ -1,4 +1,5 @@
 "use client";
+// kwabena
 import { Card, CardContent, Typography, Box, Chip } from "@mui/material";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import type { Project } from "../../types";
@@ -13,7 +14,9 @@ export default function ProjectCard({ project }: ProjectCardProps) {
             <CardContent sx={{ p: 3 }}>
                 <Box sx={{ display: "flex", justifyContent: "space-between", mb: 1 }}>
                     <Box>
-                        <Typography variant="h5">{project.title}</Typography>
+                        <Typography variant="h5" sx={{ wordBreak: "break-word" }}>
+                            {project.title}
+                        </Typography>
                         <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
                             <CalendarMonthIcon sx={{ fontSize: 12 }} />
                             <Typography variant="body2" color="text.secondary">
@@ -41,7 +44,7 @@ export default function ProjectCard({ project }: ProjectCardProps) {
                     )}
                 </Box>
 
-                <Typography variant="body1" color="text.secondary">
+                <Typography variant="body1" color="text.secondary" sx={{ wordBreak: "break-word" }}>
                     {project.description}
                 </Typography>
             </CardContent>
