@@ -8,6 +8,7 @@ import EmptyProjectState from "../components/EmptyProjectState";
 import FloatingAddButton from "../components/FloatingAddButton";
 import NewPostModal from "../components/NewPost";
 import type { Project } from "../../types";
+// kwabena
 
 
 // Max length for project title 
