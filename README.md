@@ -1,32 +1,31 @@
 # AI Project Advisor
 
-A Next.js application with AI-powered project advice, featuring authentication via Clerk.
+A Next.js application with AI-powered project advice and project sharing capability, featuring authentication via Clerk, and supporting Google OAuth.
 
 ## Setup
 
-### 1. Install Dependencies
+### 1. Clone Repository and Install Dependencies
 
 ```bash
 npm install
 ```
 
-### 2. Configure Clerk Authentication
 
-1. Create an account at [Clerk](https://clerk.com) if you don't have one
-2. Create a new application in the Clerk dashboard
-3. Enable Google and GitHub as OAuth providers:
-   - Go to **User & Authentication** → **Social Connections**
-   - Enable **Google** and **GitHub**
-   - Configure the OAuth apps in Google/GitHub and add the callback URLs provided by Clerk
-4. Copy your Clerk keys from the dashboard
-5. Create a `.env.local` file in the root directory:
+### 2. Configure authentication via Clerk
 
-```env
-NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_test_...
-CLERK_SECRET_KEY=sk_test_...
+- Create a Clerk account and new application
+- Enable Google OAuth provider
+- Copy Clerk and Supabase keys
+```
+OPENROUTER_API_KEY=<api-key>
+SUPABASE_URL=<supabase-url>
+SUPABASE_ANON_KEY=<supabase-anon-key>
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=<clerk-key>
+CLERK_SECRET_KEY=<clerk-secret-key>
 ```
 
-### 3. Run the Development Server
+
+Run the Development Server
 
 ```bash
 npm run dev
@@ -36,18 +35,19 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 ## Features
 
-- **Authentication**: Sign up and sign in with Google or GitHub via Clerk
+- **Authentication**: Sign up and sign in with Google via Clerk
 - **Protected Routes**: All routes except landing, sign-in, and sign-up pages require authentication
-- **User Profile**: Access user profile and sign out via the user button in the chat header
+- **User Profile**: Access user profile, user's projects, and sign out via the "profile" tab in the chat header
+- **AI-Assisted Project Advice**: A chatbot interface intended for AI-driven advice to get started on a project.
+- **Project Database**: An archive view of projects shared by you and others on the platform. Users can post their projects to this page and see others' posts here.
 
 ## Project Structure
 
-- `/app/sign-in` - Sign in page with Google/GitHub options
-- `/app/sign-up` - Sign up page with Google/GitHub options
-- `/app/chatbot` - Protected chatbot interface
-- `/middleware.ts` - Authentication middleware protecting routes
-
-## To do 
+- `/app` Next.js app code: pages, auth, protected routes
+- `/lib` Shared utility code, including database routing.
+- `midddleware.ts` Enforces auth on protected routes.
+- `types.ts` Type definitions used across the app.
+- `package.json`, `tsconfig.json` Project configuration and dependencies
 
 ## Component level design + overarching choices and functionality 
 
