@@ -37,8 +37,8 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 - **Authentication**: Sign up and sign in with Google via Clerk
 - **Protected Routes**: All routes except landing, sign-in, and sign-up pages require authentication
-- **User Profile**: Access user profile and sign out via the user button in the chat header
-- **AI-Assisted Project Advice**: A chatbot interface intendedd for AI-driven advice to get started on a project.
+- **User Profile**: Access user profile, user's projects, and sign out via the "profile" tab in the chat header
+- **AI-Assisted Project Advice**: A chatbot interface intended for AI-driven advice to get started on a project.
 - **Project Database**: An archive view of projects shared by you and others on the platform. Users can post their projects to this page and see others' posts here.
 
 ## Project Structure
