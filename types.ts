@@ -4,7 +4,6 @@ export interface User {
     email?: string;
     avatar?: string;
     joinedDate: Date;
-    bio: string;
 }
 
 export interface Project {

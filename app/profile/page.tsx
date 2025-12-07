@@ -1,37 +1,77 @@
 "use client";
-import React, { useState } from "react";
+//Maddie
+import React, { useState, useEffect } from "react";
 import Profile from "../components/Profile";
 import type { User, Project } from "../../types";
+import { useUser } from "@clerk/nextjs";
 
-const mockUser: User = {
-    id: "1",
-    name: "Maddie",
-    email: "maddie@example.com",
-    avatar: "",
-    joinedDate: new Date("2024-02-01"),
-    bio: "Designer • Developer • Coffee enjoyer ☕",
-};
 
-const mockProjects: Project[] = [
-    {
-        id: "a",
-        title: "Personal Portfolio",
-        description: "A clean portfolio built with Next.js & Material UI.",
-        repoUrl: "github.com/maddie/portfolio",
-        timestamp: new Date(),
-    },
-    {
-        id: "b",
-        title: "Recipe Generator",
-        description: "AI-powered recipe generator trained on my own meals.",
-        repoUrl: "wikipedia.org",
-        timestamp: new Date(),
-    },
-];
+/**
+ * PROFILE PAGE 
+ * responsible for:
+ * - fetching current Clerk user;
+ * - building User object for profile UI
+ * - fetching user's project from profile API
+ * - passing data to Profile component
+ * */
 
 export default function ProfilePage() {
-    const [user, setUser] = useState<User>(mockUser);
-    const [userProjects] = useState<Project[]>(mockProjects);
 
-    return <Profile user={user} onUpdateUser={setUser} userProjects={userProjects} />;
+    //useState: set user to the Clerk token value
+    const { user: clerkUser, isLoaded } = useUser();
+    const [user, setUser] = useState<User | null>(null);
+    const [projects, setProjects] = useState<Project[]>([]);
+    const [loading, setLoading] = useState(true);
+
+
+    //useEffect hook while Clerk finishes loading
+    useEffect(() => {
+        if (!isLoaded || !clerkUser) return;
+
+        //build user object for profile UI
+        const u: User = {
+            id: clerkUser.id,
+            name: `${clerkUser.firstName ?? ""} ${clerkUser.lastName ?? ""}`.trim(),
+            email: clerkUser.primaryEmailAddress?.emailAddress ?? "",
+            avatar: clerkUser.imageUrl,
+            joinedDate: clerkUser.createdAt ? new Date(clerkUser.createdAt) : new Date(),
+
+        }
+
+        //fetch projects ffor the logged-in user
+        const fetchProjects = async () => {
+            try {
+                const res = await fetch(`/api/profile?user_id=${clerkUser.id}`);
+                const data = await res.json();
+
+                //convert raw data from API into project type
+                const projects: Project[] = (data.projects || []).map((p: any) => ({
+                    id: p.id,
+                    title: p.title,
+                    description: p.description,
+                    repoUrl: p.repo_url ?? "",
+                    timestamp: p.timestamp ? new Date(p.timestamp) : new Date(),
+                    user_id: p.user_id,
+                }));
+
+
+                setProjects(projects);
+            } catch (err) {
+                console.error("Error fetching this user's projects:", err)
+            } finally {
+                setLoading(false)
+            }
+        };
+
+        fetchProjects();
+        setUser(u);
+
+    }, [isLoaded, clerkUser] //dependency list: re-run effect when these vars change
+    );
+
+    if (!isLoaded) return <div>Loading...</div>
+    if (!clerkUser) return <div>No user found.</div>;
+    if (!user) return <div>Loading User...</div>
+
+    return <Profile user={user} projects={projects} onUpdateUser={setUser} />;
 }

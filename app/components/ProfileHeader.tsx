@@ -1,5 +1,5 @@
 "use client";
-
+//Maddie
 import { Box, Avatar, Stack, Typography } from "@mui/material";
 import type { User } from "../../types";
 
@@ -7,11 +7,13 @@ interface ProfileHeaderProps {
     user: User;
 }
 
+//Displays user avatar, name, email at top of the Profile screen
+//presentational component
 export default function ProfileHeader({ user }: ProfileHeaderProps) {
 
     return (
         <Box sx={{ display: "flex", gap: 3, alignItems: "flex-start" }}>
-            {/* Avatar */}
+            {/* Avatar. Fall back to first letter of name if no image provided */}
             <Avatar
                 src={user.avatar}
                 sx={{ width: 96, height: 96, borderRadius: "50%" }}
@@ -29,10 +31,6 @@ export default function ProfileHeader({ user }: ProfileHeaderProps) {
                     {user.email}
                 </Typography>
 
-                {/* Bio */}
-                <Typography variant="body1" sx={{ whiteSpace: "pre-wrap", mt: 1 }}>
-                    {user.bio || "No bio available."}
-                </Typography>
             </Stack>
         </Box>
     );
